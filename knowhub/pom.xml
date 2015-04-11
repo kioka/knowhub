@@ -48,16 +48,16 @@
 					<workingDirectory>src/main/frontend</workingDirectory>
 				</configuration>
 				<executions>
-				     <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>v0.12.0</nodeVersion>
-                            <npmVersion>2.5.1</npmVersion>
-                        </configuration>
-                    </execution>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v0.12.0</nodeVersion>
+							<npmVersion>2.5.1</npmVersion>
+						</configuration>
+					</execution>
 					<execution>
 						<id>grunt build</id>
 						<goals>
@@ -71,7 +71,7 @@
 							<!-- optional: if not specified, it will run Grunt's default task 
 								(and you can remove this whole <configuration> section.) -->
 							<arguments>-v</arguments>
-							
+
 						</configuration>
 					</execution>
 				</executions>
@@ -80,6 +80,47 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target name="copy-frontend-to-webapp">
+								<mkdir dir="src/main/webapp/images" />
+								<mkdir dir="src/main/webapp/scripts" />
+								<mkdir dir="src/main/webapp/styles" />
+								<mkdir dir="src/main/webapp/views" />
+
+								<delete dir="src/main/webapp/images" />
+								<delete dir="src/main/webapp/scripts" />
+								<delete dir="src/main/webapp/styles" />
+								<delete dir="src/main/webapp/views" />
+
+								<copy includeemptydirs="false" todir="src/main/webapp/images">
+									<fileset dir="src/main/frontend/dist/images" />
+								</copy>
+								<copy includeemptydirs="false" todir="src/main/webapp/scripts">
+									<fileset dir="src/main/frontend/dist/scripts" />
+								</copy>
+								<copy includeemptydirs="false" todir="src/main/webapp/styles">
+									<fileset dir="src/main/frontend/dist/styles" />
+								</copy>
+								<copy includeemptydirs="false" todir="src/main/webapp/views">
+									<fileset dir="src/main/frontend/dist/views" />
+								</copy>
+
+							</target>
+
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
